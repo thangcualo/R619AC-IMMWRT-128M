@@ -73,8 +73,8 @@ jobs:
         ls
         cd openwrt/package
         git clone https://github.com/NueXini/NueXini_Packages
-        git clone -b js https://github.com/gngpp/luci-theme-design
-        git clone https://github.com/jerrykuku/luci-theme-argon.git
+        # git clone -b js https://github.com/gngpp/luci-theme-design
+        # git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
         # git clone https://github.com/kongfl888/luci-app-adguardhome
         # git clone https://github.com/pymumu/luci-app-smartdns
@@ -197,10 +197,10 @@ jobs:
 
         # LuCI主题:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-theme-design=y
-        CONFIG_PACKAGE_luci-theme-argon=y
-        CONFIG_PACKAGE_luci-theme-bootstrap=y
-        CONFIG_PACKAGE_luci-theme-material=y
+        # CONFIG_PACKAGE_luci-theme-design is not set
+        # CONFIG_PACKAGE_luci-theme-argon is not set
+        # CONFIG_PACKAGE_luci-theme-bootstrap=y
+        # CONFIG_PACKAGE_luci-theme-material is not set
         EOF
 
         # 常用软件包:
