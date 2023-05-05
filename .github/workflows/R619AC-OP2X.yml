@@ -74,6 +74,7 @@ jobs:
         cd openwrt/package
         git clone https://github.com/NueXini/NueXini_Packages
         git clone -b js https://github.com/gngpp/luci-theme-design
+        git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
         # git clone https://github.com/kongfl888/luci-app-adguardhome
         # git clone https://github.com/pymumu/luci-app-smartdns
