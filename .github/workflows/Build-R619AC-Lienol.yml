@@ -74,6 +74,7 @@ jobs:
         cd openwrt/package
         git clone https://github.com/NueXini/NueXini_Packages
         git clone -b js https://github.com/gngpp/luci-theme-design
+        git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
         # git clone https://github.com/kongfl888/luci-app-adguardhome
         # git clone https://github.com/pymumu/luci-app-smartdns
@@ -100,7 +101,7 @@ jobs:
         sed -i "s/SNAPSHOT/Wing build $(TZ=UTC-8 date "+%Y.%m.%d")/g" package/default-settings/files/zzz-default-settings
         sed '10 iuci\ set\ system.@system[0].hostname=G-Dock' -i package/default-settings/files/zzz-default-settings
         sed -i "/firewall\.user/d" package/default-settings/files/zzz-default-settings
-        sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
+        sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generate
         # rm -rf ./package/small-package/luci-app-adguardhome
 
     - name: Update feeds
@@ -170,32 +171,33 @@ jobs:
         # LuCI插件选择:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
-        CONFIG_PACKAGE_luci-app-diskman=y
-        CONFIG_PACKAGE_luci-app-alist=y
+        # CONFIG_PACKAGE_luci-app-diskman is not set
+        # CONFIG_PACKAGE_luci-app-alist is not set
         CONFIG_PACKAGE_luci-app-ddns=y
         CONFIG_PACKAGE_luci-app-filetransfer=y
-        CONFIG_PACKAGE_luci-app-nlbwmon=y
+        # CONFIG_PACKAGE_luci-app-nlbwmon is not set
         CONFIG_PACKAGE_luci-app-firewall=y
-        CONFIG_PACKAGE_luci-app-pushbot=y
+        # CONFIG_PACKAGE_luci-app-pushbot is not set
         CONFIG_PACKAGE_luci-app-smartdns=y
-        CONFIG_PACKAGE_luci-app-samba4=y
-        CONFIG_PACKAGE_luci-app-hd-idle=y
+        # CONFIG_PACKAGE_luci-app-samba4 is not set
+        # CONFIG_PACKAGE_luci-app-hd-idle is not set
         CONFIG_PACKAGE_luci-app-ttyd=y
         CONFIG_PACKAGE_luci-app-wol=y
-        CONFIG_PACKAGE_luci-app-wrtbwmon=y
+        # CONFIG_PACKAGE_luci-app-wrtbwmon is not set
         CONFIG_PACKAGE_luci-app-ramfree=y
-        CONFIG_PACKAGE_luci-app-frpc=y
+        # CONFIG_PACKAGE_luci-app-frpc is not set
         CONFIG_PACKAGE_luci-app-webadmin=y
         CONFIG_PACKAGE_luci-app-upnp=y
-        CONFIG_PACKAGE_luci-app-vsftpd=y
+        # CONFIG_PACKAGE_luci-app-vsftpd is not set
         CONFIG_PACKAGE_luci-app-vlmcsd=y
-        CONFIG_PACKAGE_luci-app-zerotier=y
+        # CONFIG_PACKAGE_luci-app-zerotier is not set
         CONFIG_PACKAGE_luci-app-passwall=y
-        CONFIG_PACKAGE_luci-app-adguardhome=y
+        # CONFIG_PACKAGE_luci-app-adguardhome is not set
         EOF
 
         # LuCI主题:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-theme-design=y
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-theme-bootstrap=y
         CONFIG_PACKAGE_luci-theme-material=y
@@ -204,8 +206,8 @@ jobs:
         # 常用软件包:
         cat >> .config <<EOF
         CONFIG_DEFAULT_coremark=y
-        CONFIG_PACKAGE_e2fsprogs=y
-        CONFIG_PACKAGE_block-mount=y
+        # CONFIG_PACKAGE_e2fsprogs is not set
+        # CONFIG_PACKAGE_block-mount is not set
         # CONFIG_PACKAGE_luci-app-unblockmusic is not set
         EOF
 
@@ -298,8 +300,8 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ${{ env.FIRMWARE }}/*
         body: |
-          - 默认IP：192.168.10.1
-          - 默认密码：password
+          - 默认IP：192.168.2.1
+          - 默认密码：ADMIN
           - 当前使用版本:【编译前的最后一次[➦主源码](https://github.com/Lienol/openwrt)更新记录】
           - 下载后请仔细校验MD5，如不正确请重新下载
           ${{ env.useVersionInfo }}
