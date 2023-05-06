@@ -96,8 +96,7 @@ jobs:
         mkdir openwrt/target/linux/ipq40xx/base-files/etc/hotplug.d/net
         cp -f patch/21_adjust_network openwrt/target/linux/ipq40xx/base-files/etc/hotplug.d/net/21_adjust_network
         cp -f patch/adjust_network openwrt/target/linux/ipq40xx/base-files/etc/init.d/adjust_network
-        cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh
-        sed -i 's/auto/zh_cn/g' luci/modules/luci-base/root/etc/config/luci
+        cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh        
         sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
 
     - name: Update feeds
@@ -107,6 +106,7 @@ jobs:
       run: |
         rm -rf feeds/packages/lang/golang
         svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
+        sed -i 's/auto/zh_cn/g' luci/modules/luci-base/root/etc/config/luci
 
     - name: Generate configuration file
       run: |
