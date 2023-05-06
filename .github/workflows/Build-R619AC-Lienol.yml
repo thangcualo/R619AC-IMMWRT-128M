@@ -73,7 +73,8 @@ jobs:
         ls
         cd openwrt/package
         git clone https://github.com/NueXini/NueXini_Packages
-        # git clone -b js https://github.com/gngpp/luci-theme-design
+        svn export https://github.com/leesuncom/packages/trunk/net/smartdns
+        git clone -b js https://github.com/gngpp/luci-theme-design
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
         # git clone https://github.com/kongfl888/luci-app-adguardhome
@@ -106,7 +107,6 @@ jobs:
       run: |
         rm -rf feeds/packages/lang/golang
         svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
-        sed -i 's/auto/zh_cn/g' luci/modules/luci-base/root/etc/config/luci
 
     - name: Generate configuration file
       run: |
@@ -193,7 +193,7 @@ jobs:
 
         # LuCI主题:
         cat >> .config <<EOF
-        # CONFIG_PACKAGE_luci-theme-design is not set
+        CONFIG_PACKAGE_luci-theme-design=y
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-theme-bootstrap=y
         # CONFIG_PACKAGE_luci-theme-material is not set
