@@ -186,12 +186,12 @@ jobs:
         # CONFIG_PACKAGE_luci-app-wrtbwmon is not set
         CONFIG_PACKAGE_luci-app-ramfree=y
         # CONFIG_PACKAGE_luci-app-frpc is not set
-        CONFIG_PACKAGE_luci-app-webadmin=y
+        # CONFIG_PACKAGE_luci-app-webadmin is not set
         CONFIG_PACKAGE_luci-app-upnp=y
         # CONFIG_PACKAGE_luci-app-vsftpd is not set
         CONFIG_PACKAGE_luci-app-vlmcsd=y
         # CONFIG_PACKAGE_luci-app-zerotier is not set
-        CONFIG_PACKAGE_luci-app-passwall=y
+        # CONFIG_PACKAGE_luci-app-passwall is not set
         # CONFIG_PACKAGE_luci-app-adguardhome is not set
         EOF
 
