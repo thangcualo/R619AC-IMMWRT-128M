@@ -22,8 +22,8 @@ on:
     types: [started]
     
 env:
-  REPO_URL: https://github.com/openwrt/openwrt.git
-  REPO_BRANCH: openwrt-22.03
+  REPO_URL: https://github.com/Lienol/openwrt
+  REPO_BRANCH: 22.03
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
@@ -74,7 +74,7 @@ jobs:
         cd openwrt/package
         git clone https://github.com/NueXini/NueXini_Packages
         svn export https://github.com/leesuncom/packages/trunk/net/smartdns
-        git clone -b js https://github.com/gngpp/luci-theme-design
+        # git clone -b js https://github.com/gngpp/luci-theme-design
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
         # git clone https://github.com/kongfl888/luci-app-adguardhome
@@ -97,8 +97,13 @@ jobs:
         mkdir openwrt/target/linux/ipq40xx/base-files/etc/hotplug.d/net
         cp -f patch/21_adjust_network openwrt/target/linux/ipq40xx/base-files/etc/hotplug.d/net/21_adjust_network
         cp -f patch/adjust_network openwrt/target/linux/ipq40xx/base-files/etc/init.d/adjust_network
-        cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh        
-        sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
+        cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh
+        cd openwrt
+        sed -i "s/SNAPSHOT/Wing build $(TZ=UTC-8 date "+%Y.%m.%d")/g" package/default-settings/files/zzz-default-settings
+        sed '10 iuci\ set\ system.@system[0].hostname=G-Dock' -i package/default-settings/files/zzz-default-settings
+        sed -i "/firewall\.user/d" package/default-settings/files/zzz-default-settings
+        sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generate
+        # rm -rf ./package/small-package/luci-app-adguardhome
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -193,7 +198,7 @@ jobs:
 
         # LuCI主题:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-theme-design=y
+        # CONFIG_PACKAGE_luci-theme-design is not set
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-theme-bootstrap=y
         # CONFIG_PACKAGE_luci-theme-material is not set
