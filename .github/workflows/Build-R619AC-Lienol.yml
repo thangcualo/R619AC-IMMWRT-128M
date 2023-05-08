@@ -102,7 +102,9 @@ jobs:
         mkdir openwrt/target/linux/ipq40xx/base-files/etc/hotplug.d/net
         cp -f patch/21_adjust_network openwrt/target/linux/ipq40xx/base-files/etc/hotplug.d/net/21_adjust_network
         cp -f patch/adjust_network openwrt/target/linux/ipq40xx/base-files/etc/init.d/adjust_network
-        cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh        
+        cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh
+        cd openwrt
+        sed -i 's/[b|B]ootstrap/argon/g' ./feeds/luci/collections/luci/Makefile
         sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
         # sed -i 'uci set system.@system[0].hostname=NeoBird' openwrt/package/base-files/files/bin/config_generate
         
