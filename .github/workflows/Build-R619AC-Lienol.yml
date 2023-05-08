@@ -75,10 +75,10 @@ jobs:
     - name: Update packages
       env:
         SCKEY: ${{ secrets.ACTIONS_TRIGGER_PAT }}
-      run: |
-        rm -rf feeds/luci/applications/luci-app-smartdns
+      run: |        
         ls
-        cd openwrt/package        
+        cd openwrt/package
+        rm -rf feeds/luci/applications/luci-app-smartdns
         git clone https://github.com/NueXini/NueXini_Packages
         # git clone https://github.com/pymumu/luci-app-smartdns.git
         svn export https://github.com/leesuncom/packages/trunk/net/smartdns
@@ -118,6 +118,7 @@ jobs:
         
     - name: Generate configuration file
       run: |
+        rm -rf feeds/luci/applications/luci-app-smartdns
         cd openwrt
         rm -f ./.config*
         touch ./.config
