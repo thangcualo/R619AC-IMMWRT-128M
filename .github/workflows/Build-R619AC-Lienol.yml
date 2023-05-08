@@ -73,6 +73,7 @@ jobs:
         prefix: ${{ github.workspace }}/openwrt
 
     - name: Update packages
+       rm -rf feeds/luci/applications/luci-app-smartdns
       env:
         SCKEY: ${{ secrets.ACTIONS_TRIGGER_PAT }}
       run: |        
@@ -103,7 +104,7 @@ jobs:
         cp -f patch/adjust_network openwrt/target/linux/ipq40xx/base-files/etc/init.d/adjust_network
         cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh
         # rm -rf package/NueXini_Packages/luci-app-smartdns
-        # rm -rf feeds/luci/applications/luci-app-smartdns
+        rm -rf feeds/luci/applications/luci-app-smartdns
         sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
         # sed -i 'uci set system.@system[0].hostname=NeoBird' openwrt/package/base-files/files/bin/config_generate
         
