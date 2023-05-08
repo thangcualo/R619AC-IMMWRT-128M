@@ -29,7 +29,7 @@ on:
     types: [started]
     
 env:
-  REPO_URL: https://github.com/openwrt/openwrt.git
+  REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: openwrt-22.03
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
