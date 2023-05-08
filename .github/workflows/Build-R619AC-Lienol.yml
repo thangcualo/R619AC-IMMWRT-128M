@@ -79,8 +79,8 @@ jobs:
         ls
         cd openwrt/package
         rm -rf feeds/luci/applications/luci-app-smartdns
-        git clone https://github.com/NueXini/NueXini_Packages
-        # git clone https://github.com/pymumu/luci-app-smartdns.git
+        # git clone https://github.com/NueXini/NueXini_Packages
+        git clone https://github.com/pymumu/luci-app-smartdns.git
         svn export https://github.com/leesuncom/packages/trunk/net/smartdns
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
@@ -167,11 +167,11 @@ jobs:
         EOF
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-autoreboot=y
+        # CONFIG_PACKAGE_luci-app-autoreboot is not set
         # CONFIG_PACKAGE_luci-app-diskman is not set
         # CONFIG_PACKAGE_luci-app-alist is not set
-        CONFIG_PACKAGE_luci-app-ddns=y
-        CONFIG_PACKAGE_luci-app-filetransfer=y
+        # CONFIG_PACKAGE_luci-app-ddns is not set
+        # CONFIG_PACKAGE_luci-app-filetransfer is not set
         # CONFIG_PACKAGE_luci-app-nlbwmon is not set
         CONFIG_PACKAGE_luci-app-firewall=y
         # CONFIG_PACKAGE_luci-app-pushbot is not set
@@ -181,15 +181,15 @@ jobs:
         CONFIG_PACKAGE_luci-app-ttyd=y
         CONFIG_PACKAGE_luci-app-wol=y
         # CONFIG_PACKAGE_luci-app-wrtbwmon is not set
-        CONFIG_PACKAGE_luci-app-ramfree=y
+        CONFIG_PACKAGE_luci-app-ramfree is not set
         # CONFIG_PACKAGE_luci-app-frpc is not set
         # CONFIG_PACKAGE_luci-app-webadmin is not set
         CONFIG_PACKAGE_luci-app-upnp=y
         # CONFIG_PACKAGE_luci-app-vsftpd is not set
-        CONFIG_PACKAGE_luci-app-vlmcsd=y
+        # CONFIG_PACKAGE_luci-app-vlmcsd is not set
         # CONFIG_PACKAGE_luci-app-turboacc=y
         # CONFIG_PACKAGE_luci-app-zerotier is not set
-        CONFIG_PACKAGE_luci-app-passwall=y
+        # CONFIG_PACKAGE_luci-app-passwall is not set
         # CONFIG_PACKAGE_luci-app-adguardhome is not set
         EOF
         # LuCI主题:
