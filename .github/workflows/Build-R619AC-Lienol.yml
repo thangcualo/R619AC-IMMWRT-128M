@@ -106,7 +106,6 @@ jobs:
         cd openwrt
         rm -rf package/NueXini_Packages/luci-app-smartdns
         rm -rf feeds/luci/applications/luci-app-smartdns
-        sed -i 's/[b|B]ootstrap/argon/g' ./feeds/luci/collections/luci/Makefile
         sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
         # sed -i 'uci set system.@system[0].hostname=NeoBird' openwrt/package/base-files/files/bin/config_generate
         
