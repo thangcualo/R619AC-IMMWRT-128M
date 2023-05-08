@@ -185,7 +185,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-upnp=y
         # CONFIG_PACKAGE_luci-app-vsftpd is not set
         CONFIG_PACKAGE_luci-app-vlmcsd=y
-        CONFIG_PACKAGE_luci-app-turboacc=y
+        # CONFIG_PACKAGE_luci-app-turboacc=y
         # CONFIG_PACKAGE_luci-app-zerotier is not set
         CONFIG_PACKAGE_luci-app-passwall=y
         # CONFIG_PACKAGE_luci-app-adguardhome is not set
