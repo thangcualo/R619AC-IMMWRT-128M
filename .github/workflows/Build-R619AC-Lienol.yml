@@ -103,7 +103,7 @@ jobs:
         cp -f patch/adjust_network openwrt/target/linux/ipq40xx/base-files/etc/init.d/adjust_network
         cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh        
         sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
-        sed -i 'uci set system.@system[0].hostname=NeoBird' openwrt/package/base-files/files/bin/config_generate
+        # sed -i 'uci set system.@system[0].hostname=NeoBird' openwrt/package/base-files/files/bin/config_generate
         
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -111,8 +111,8 @@ jobs:
     - name: FilePatch2
       run: |
         rm -rf feeds/luci/applications/luci-app-smartdns
-        rm -rf feeds/packages/lang/golang
-        svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
+        # rm -rf feeds/packages/lang/golang
+        # svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
     - name: Generate configuration file
       run: |
         cd openwrt
@@ -151,7 +151,7 @@ jobs:
         CONFIG_TARGET_ipq40xx=y
         CONFIG_TARGET_ipq40xx_generic=y
         CONFIG_TARGET_ipq40xx_generic_DEVICE_p2w_r619ac-128m=y
-        CONFIG_LINUX_5_10=y
+        # CONFIG_LINUX_5_10=y
         EOF
         # IPv6支持:
         cat >> .config <<EOF
@@ -183,7 +183,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-upnp=y
         # CONFIG_PACKAGE_luci-app-vsftpd is not set
         CONFIG_PACKAGE_luci-app-vlmcsd=y
-        CONFIG_PACKAGE_luci-i18n-vlmcsd-zh-cn=y
+        CONFIG_PACKAGE_luci-app-turboacc=y
         # CONFIG_PACKAGE_luci-app-zerotier is not set
         CONFIG_PACKAGE_luci-app-passwall=y
         # CONFIG_PACKAGE_luci-app-adguardhome is not set
