@@ -80,8 +80,8 @@ jobs:
         ls
         cd openwrt/package
         rm -rf feeds/luci/applications/luci-app-smartdns
-        # git clone https://github.com/NueXini/NueXini_Packages
-        git clone https://github.com/pymumu/luci-app-smartdns.git
+        git clone https://github.com/NueXini/NueXini_Packages
+        # git clone https://github.com/pymumu/luci-app-smartdns.git
         svn export https://github.com/leesuncom/packages/trunk/net/smartdns
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
@@ -113,7 +113,7 @@ jobs:
 
     - name: FilePatch2
       run: |
-        # rm -rf feeds/luci/applications/luci-app-smartdns       
+        rm -rf feeds/luci/applications/luci-app-smartdns       
         # rm -rf feeds/packages/lang/golang
         # svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
         
