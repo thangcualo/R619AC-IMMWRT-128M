@@ -228,6 +228,7 @@ jobs:
       id: package
       run: |
         rm -rf feeds/luci/applications/luci-app-smartdns
+        cd openwrt/package
         git clone https://github.com/pymumu/luci-app-smartdns.git
         cd openwrt 
         make download -j8
