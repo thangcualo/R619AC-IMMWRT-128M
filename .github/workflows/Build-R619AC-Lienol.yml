@@ -73,10 +73,11 @@ jobs:
         prefix: ${{ github.workspace }}/openwrt
 
     - name: Update packages
-       rm -rf feeds/luci/applications/luci-app-smartdns
+       
       env:
         SCKEY: ${{ secrets.ACTIONS_TRIGGER_PAT }}
-      run: |        
+      run: | 
+        rm -rf feeds/luci/applications/luci-app-smartdns
         ls
         cd openwrt/package
         rm -rf feeds/luci/applications/luci-app-smartdns
