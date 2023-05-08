@@ -79,7 +79,7 @@ jobs:
         ls
         cd openwrt/package        
         git clone https://github.com/NueXini/NueXini_Packages
-        git clone https://github.com/pymumu/luci-app-smartdns.git
+        # git clone https://github.com/pymumu/luci-app-smartdns.git
         svn export https://github.com/leesuncom/packages/trunk/net/smartdns
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
