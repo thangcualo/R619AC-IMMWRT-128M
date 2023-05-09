@@ -73,6 +73,7 @@ jobs:
         ls
         cd openwrt/package
         git clone https://github.com/NueXini/NueXini_Packages
+        git clone https://github.com/fw876/helloworld
         svn export https://github.com/leesuncom/packages/trunk/net/smartdns
         git clone https://github.com/jerrykuku/luci-theme-argon.git
         # git clone https://github.com/tty228/luci-app-serverchan
@@ -90,7 +91,7 @@ jobs:
         cp -f patch/adjust_network openwrt/target/linux/ipq40xx/base-files/etc/init.d/adjust_network
         cp -f patch/adjust_network.sh openwrt/target/linux/ipq40xx/base-files/lib/adjust_network.sh        
         sed -i 's/192.168.1.1/192.168.1.2/g' openwrt/package/base-files/files/bin/config_generate
-        sed -i '313s/OpenWrt/NeoBird/g' openwrt/package/base-files/files/bin/config_generate
+        sed '313c set system.@system[-1].hostname=NeoBird' openwrt/package/base-files/files/bin/config_generate
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -166,6 +167,8 @@ jobs:
         CONFIG_PACKAGE_luci-app-firewall=y
         # CONFIG_PACKAGE_luci-app-pushbot is not set
         CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
         # CONFIG_PACKAGE_luci-app-samba4 is not set
         # CONFIG_PACKAGE_luci-app-hd-idle is not set
         CONFIG_PACKAGE_luci-app-ttyd=y
@@ -178,7 +181,7 @@ jobs:
         # CONFIG_PACKAGE_luci-app-vsftpd is not set
         CONFIG_PACKAGE_luci-app-vlmcsd=y
         # CONFIG_PACKAGE_luci-app-zerotier is not set
-        CONFIG_PACKAGE_luci-app-passwall=y
+        # CONFIG_PACKAGE_luci-app-passwall is not set
         # CONFIG_PACKAGE_luci-app-adguardhome is not set
         EOF
 
