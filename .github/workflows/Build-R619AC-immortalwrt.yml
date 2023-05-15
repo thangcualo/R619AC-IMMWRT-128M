@@ -74,8 +74,8 @@ jobs:
       run: |
         ls
         cd openwrt/package
-        git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot
-        svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
+        # git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot
+        # svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
 
     - name: File Patch Before
       run: |
@@ -83,8 +83,8 @@ jobs:
         cd openwrt
         sed '14 iuci\ commit\ network' -i package/emortal/default-settings/files/99-default-settings-chinese
         sed '14 iset\ network.globals.packet_steering=1' -i package/emortal/default-settings/files/99-default-settings-chinese
-        sed '4 iset\ system.@system[0].hostname=G-Dock' -i package/emortal/default-settings/files/99-default-settings-chinese
-        sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
+        sed '4 iset\ system.@system[0].hostname=NeoBird' -i package/emortal/default-settings/files/99-default-settings-chinese
+        sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generate
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -92,7 +92,6 @@ jobs:
     - name: File Patch After
       run: |
         
-
     - name: Generate configuration file
       run: |
         cd openwrt
@@ -162,26 +161,26 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-adguardhome=y
+        # CONFIG_PACKAGE_luci-app-adguardhome is not set
         CONFIG_PACKAGE_luci-app-argon-config=y
         CONFIG_PACKAGE_luci-app-autoreboot=y
         CONFIG_PACKAGE_luci-app-ddns=y
         CONFIG_PACKAGE_luci-app-firewall=y
         CONFIG_PACKAGE_luci-app-filetransfer=y
-        CONFIG_PACKAGE_luci-app-passwall=y
+        # CONFIG_PACKAGE_luci-app-passwall is not set
         CONFIG_PACKAGE_luci-app-pushbot=y
         CONFIG_PACKAGE_luci-app-ramfree=y
-        CONFIG_PACKAGE_luci-app-samba4=y
+        # CONFIG_PACKAGE_luci-app-samba4 is not set
         CONFIG_PACKAGE_luci-app-ssr-plus=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
         CONFIG_PACKAGE_luci-app-smartdns=y
-        CONFIG_PACKAGE_luci-app-sqm=y
+        # CONFIG_PACKAGE_luci-app-sqm is not set
         CONFIG_PACKAGE_luci-app-ttyd=y
         CONFIG_PACKAGE_luci-app-upnp=y
-        CONFIG_PACKAGE_luci-app-vsftpd=y
+        # CONFIG_PACKAGE_luci-app-vsftpd is not set
         CONFIG_PACKAGE_luci-app-vlmcsd=y
         CONFIG_PACKAGE_luci-app-wol=y
-        CONFIG_PACKAGE_luci-app-zerotier=y
+        # CONFIG_PACKAGE_luci-app-zerotier is not set
         EOF
 
         # LuCI主题:
@@ -193,6 +192,8 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_autocore=y
         CONFIG_PACKAGE_default-settings-chn=y
+        # CONFIG_PACKAGE_automount is not set
+        # CONFIG_PACKAGE_autosamba is not set
         EOF
 
         # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
