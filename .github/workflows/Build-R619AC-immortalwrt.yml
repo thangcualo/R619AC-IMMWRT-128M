@@ -75,9 +75,7 @@ jobs:
         ls
         cd openwrt/package
         git clone --depth=1 https://github.com/kenzok8/small-package
-        # git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot
-        # svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
-        EOF
+        # git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbo
     - name: File Patch Before
       run: |
         cp -f patch/rc.local openwrt/package/base-files/files/etc/rc.local
