@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/thangcualo/immortalwrt
-  REPO_BRANCH: 5.15.125
+  REPO_BRANCH: 21.02.02
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
