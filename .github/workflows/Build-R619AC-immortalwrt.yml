@@ -183,6 +183,21 @@ jobs:
         CONFIG_PACKAGE_ip6tables-mod-nat=y
         CONFIG_PACKAGE_ipv6helper=y
         EOF
+        # ROOter support
+        CONFIG_PACKAGE_kmod-usb-serial-sierrawireless=y
+        CONFIG_PACKAGE_luci-proto-3x=y
+        CONFIG_PACKAGE_luci-proto-mbim=y
+        CONFIG_PACKAGE_rmbim=y
+        CONFIG_PACKAGE_rqmi=y
+        CONFIG_PACKAGE_ext-sms=y
+        CONFIG_PACKAGE_ext-buttons=y
+        CONFIG_PACKAGE_ext-rooter-basic=y
+        CONFIG_PACKAGE_ext-splash=y
+        CONFIG_PACKAGE_ext-splashconfig=y
+        CONFIG_PACKAGE_bwmon=y
+        CONFIG_PACKAGE_bwallocate=y
+        CONFIG_PACKAGE_ext-throttle=y 
+        CONFIG_PACKAGE_msmtp=y
 
         # LuCI插件选择:
         cat >> .config <<EOF
