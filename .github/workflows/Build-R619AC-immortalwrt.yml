@@ -22,8 +22,8 @@ on:
     types: [started]
     
 env:
-  REPO_URL: https://github.com/thangcualo/immortalwrt
-  REPO_BRANCH: 21.02.02
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-23.05
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
@@ -74,8 +74,9 @@ jobs:
       run: |
         ls
         cd openwrt/package
-        git clone --depth=1 https://github.com/kenzok8/small-package
-        # git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbo
+        # git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot
+        # svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
+
     - name: File Patch Before
       run: |
         cp -f patch/rc.local openwrt/package/base-files/files/etc/rc.local
@@ -84,30 +85,6 @@ jobs:
         sed '14 iset\ network.globals.packet_steering=1' -i package/emortal/default-settings/files/99-default-settings-chinese
         sed '4 iset\ system.@system[0].hostname=NeoBird' -i package/emortal/default-settings/files/99-default-settings-chinese
         sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generate
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter-builds/0protocols/luci-proto-3x package/luci-proto-3x
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter-builds/0protocols/luci-proto-mbim package/luci-proto-mbim
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0drivers/rmbim package/rmbim
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0drivers/rqmi package/rqmi
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0basicsupport/ext-sms package/ext-sms
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0basicsupport/ext-buttons package/ext-buttons
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/ext-rooter-basic package/ext-rooter-basic
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0splash/status package/status
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0splash/splash package/splash
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0splash/ext-splashconfig package/ext-splashconfig
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0splash/ext-splash package/ext-splash
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0optionalapps/bwallocate package/bwallocate
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0optionalapps/bwmon package/bwmon
-        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0optionalapps/ext-throttle package/ext-throttle
-
-# disable banner from rooter
-        sudo chmod -x package/ext-rooter-basic/files/etc/init.d/bannerset
-        sed -i 's/luci-theme-openwrt-2020/luci-theme-argon/g' package/ext-rooter-basic/Makefile
-# Set modemmanager to disable
-        mkdir -p feeds/luci/protocols/luci-proto-modemmanager/root/etc/uci-defaults
-        cat << EOF > feeds/luci/protocols/luci-proto-modemmanager/root/etc/uci-defaults/70-modemmanager
-        [ -f /etc/init.d/modemmanager ] && /etc/init.d/modemmanager disable
-        exit 0
-        EOF
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -181,21 +158,6 @@ jobs:
         CONFIG_PACKAGE_ip6tables-mod-nat=y
         CONFIG_PACKAGE_ipv6helper=y
         EOF
-        # ROOter support
-        CONFIG_PACKAGE_kmod-usb-serial-sierrawireless=y
-        CONFIG_PACKAGE_luci-proto-3x=y
-        CONFIG_PACKAGE_luci-proto-mbim=y
-        CONFIG_PACKAGE_rmbim=y
-        CONFIG_PACKAGE_rqmi=y
-        CONFIG_PACKAGE_ext-sms=y
-        CONFIG_PACKAGE_ext-buttons=y
-        CONFIG_PACKAGE_ext-rooter-basic=y
-        CONFIG_PACKAGE_ext-splash=y
-        CONFIG_PACKAGE_ext-splashconfig=y
-        CONFIG_PACKAGE_bwmon=y
-        CONFIG_PACKAGE_bwallocate=y
-        CONFIG_PACKAGE_ext-throttle=y 
-        CONFIG_PACKAGE_msmtp=y
 
         # LuCI插件选择:
         cat >> .config <<EOF
@@ -271,7 +233,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j8 || make -j8
+        make -j$(nproc) || make -j1 || make -j1 V=s
         echo "::set-output name=status::success"
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
