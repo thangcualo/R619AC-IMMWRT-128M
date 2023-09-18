@@ -86,13 +86,13 @@ jobs:
         sed '4 iset\ system.@system[0].hostname=NeoBird' -i package/emortal/default-settings/files/99-default-settings-chinese
         sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generate
         # Rooter Support untuk modem rakitan
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter-builds/0protocols/luci-proto-3x package/luci-proto-3x
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter-builds/0protocols/luci-proto-mbim package/luci-proto-mbim
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter/0drivers/rmbim package/rmbim
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter/0drivers/rqmi package/rqmi
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter/0basicsupport/ext-sms package/ext-sms
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter/0basicsupport/ext-buttons package/ext-buttons
-        svn co https://github.com/karnadii/rooter/trunk/package/rooter/ext-rooter-basic package/ext-rooter-basic
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter-builds/0protocols/luci-proto-3x package/luci-proto-3x
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter-builds/0protocols/luci-proto-mbim package/luci-proto-mbim
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0drivers/rmbim package/rmbim
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0drivers/rqmi package/rqmi
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0basicsupport/ext-sms package/ext-sms
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/0basicsupport/ext-buttons package/ext-buttons
+        svn co https://github.com/thangcualo/ROOterSource2102/trunk/package/rooter/ext-rooter-basic package/ext-rooter-basic
         # Rooter splash
         svn co https://github.com/karnadii/rooter/trunk/package/rooter/0splash/status package/status
         svn co https://github.com/karnadii/rooter/trunk/package/rooter/0splash/splash package/splash
@@ -106,7 +106,21 @@ jobs:
         # disable banner from rooter
         sudo chmod -x package/ext-rooter-basic/files/etc/init.d/bannerset
         sed -i 's/luci-theme-openwrt-2020/luci-theme-argon/g' package/ext-rooter-basic/Makefile
-
+        # Add luci-app-atinout-mod
+        svn co https://github.com/lynxnexy/luci-app-atinout-mod/trunk package/luci-app-atinout-mod
+        
+        # internet detector
+        svn co https://github.com/gSpotx2f/luci-app-internet-detector/trunk/luci-app-internet-detector package/luci-app-internet-detector
+        svn co https://github.com/gSpotx2f/luci-app-internet-detector/trunk/internet-detector package/internet-detector
+        # iStore
+        svn co https://github.com/linkease/istore-ui/trunk/app-store-ui package/app-store-ui
+        svn co https://github.com/linkease/istore/trunk/luci package/istore
+        # Set modemmanager to disable
+        mkdir -p feeds/luci/protocols/luci-proto-modemmanager/root/etc/uci-defaults
+        cat << EOF > feeds/luci/protocols/luci-proto-modemmanager/root/etc/uci-defaults/70-modemmanager
+        [ -f /etc/init.d/modemmanager ] && /etc/init.d/modemmanager disable
+        exit 0
+        EOF
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
 
@@ -208,9 +222,24 @@ jobs:
         # CONFIG_PACKAGE_luci-app-zerotier is not set
         EOF
 
-        # LuCI主题:
+        # rooter support:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_kmod-usb-serial-sierrawireless=y
+        CONFIG_PACKAGE_luci-proto-3x=y
+        CONFIG_PACKAGE_luci-proto-mbim=y
+        CONFIG_PACKAGE_rmbim=y
+        CONFIG_PACKAGE_rqmi=y
+        CONFIG_PACKAGE_ext-sms=y
+        CONFIG_PACKAGE_ext-buttons=y
+        CONFIG_PACKAGE_ext-rooter-basic=y
+        CONFIG_PACKAGE_ext-splash=y
+        CONFIG_PACKAGE_ext-splashconfig=y
+        CONFIG_PACKAGE_bwmon=y
+        CONFIG_PACKAGE_bwallocate=y
+        CONFIG_PACKAGE_ext-throttle=y 
+        CONFIG_PACKAGE_msmtp=y
         CONFIG_PACKAGE_luci-theme-argon=y
+        CONFIG_PACKAGE_luci-app-atinout-mod=y
         EOF
 
         # 常用软件包:
