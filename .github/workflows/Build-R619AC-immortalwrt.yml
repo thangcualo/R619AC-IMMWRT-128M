@@ -22,8 +22,8 @@ on:
     types: [started]
     
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-23.05
+  REPO_URL: https://github.com/thangcualo/immortalwrt
+  REPO_BRANCH: 21.02.02
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
@@ -107,7 +107,7 @@ jobs:
         sudo chmod -x package/ext-rooter-basic/files/etc/init.d/bannerset
         sed -i 's/luci-theme-openwrt-2020/luci-theme-argon/g' package/ext-rooter-basic/Makefile
         # Add luci-app-atinout-mod
-        svn co https://github.com/lynxnexy/luci-app-atinout-mod/trunk package/luci-app-atinout-mod
+        # svn co https://github.com/lynxnexy/luci-app-atinout-mod/trunk package/luci-app-atinout-mod
         
         # internet detector
         svn co https://github.com/gSpotx2f/luci-app-internet-detector/trunk/luci-app-internet-detector package/luci-app-internet-detector
@@ -239,7 +239,7 @@ jobs:
         CONFIG_PACKAGE_ext-throttle=y 
         CONFIG_PACKAGE_msmtp=y
         CONFIG_PACKAGE_luci-theme-argon=y
-        CONFIG_PACKAGE_luci-app-atinout-mod=y
+        # CONFIG_PACKAGE_luci-app-atinout-mod is not set
         EOF
 
         # 常用软件包:
