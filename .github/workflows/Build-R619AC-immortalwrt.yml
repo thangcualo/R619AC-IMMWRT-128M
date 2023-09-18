@@ -108,6 +108,87 @@ jobs:
         sed -i 's/luci-theme-openwrt-2020/luci-theme-argon/g' package/ext-rooter-basic/Makefile
         # Add luci-app-atinout-mod
         svn co https://github.com/4IceG/luci-app-atinout-mod/trunk package/luci-app-atinout-mod
+        # Add p7zip
+        svn co https://github.com/hubutui/p7zip-lede/trunk package/p7zip
+
+        # Add luci-app-tinyfilemanager
+        # svn co https://github.com/lynxnexy/luci-app-tinyfilemanager/trunk package/luci-app-tinyfilemanager
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-tinyfm package/luci-app-tinyfm
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-libernet-plus package/luci-app-libernet-plus
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-libernet-bin package/luci-app-libernet-bin
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-mulimiter package/luci-app-mulimiter
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-myxllite package/luci-app-myxllite
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-netmon package/luci-app-netmon
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/luci-app-openspeedtest package/luci-app-openspeedtest
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/badvpn package/badvpn
+        svn co https://github.com/helmiau/helmiwrt-packages/trunk/corkscrew package/corkscrew
+        
+        rm -rf feeds/luci/applications/luci-app-filebrowser
+        svn co https://github.com/happy902/luci-app-filebrowser/trunk package/luci-app-filebrowser
+        
+        # Add luci-app-adguardhome
+        svn co https://github.com/rufengsuixing/luci-app-adguardhome/trunk package/luci-app-adguardhome
+        
+        # Set adguardhome-core
+        mkdir -p files/usr/bin/AdGuardHome
+        AGH_CORE=$(curl -sL https://api.github.com/repos/AdguardTeam/AdGuardHome/releases | grep /AdGuardHome_linux_arm64 | awk -F '"' '{print $4}' | sed -n '1p')
+        wget -qO- $AGH_CORE | tar xOvz > files/usr/bin/AdGuardHome/AdGuardHome
+        chmod +x files/usr/bin/AdGuardHome/AdGuardHome
+        
+        # Set yt-dlp
+        mkdir -p files/bin
+        curl -sL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o files/bin/yt-dlp
+        chmod +x files/bin/yt-dlp
+        
+        # Set speedtest
+        mkdir -p files/bin
+        wget -qO- https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-linux-aarch64.tgz | tar xOvz > files/bin/speedtest
+        chmod +x files/bin/speedtest
+        
+        #================================
+        # Injek/Vpn/Bypass App
+        #================================
+        # Add luci-app-openclash
+        rm -rf feeds/luci/applications/luci-app-openclash
+        svn co https://github.com/vernesong/OpenClash/trunk/luci-app-openclash package/luci-app-openclash
+        pushd package/luci-app-openclash/tools/po2lmo
+        make && sudo make install
+        popd
+        
+        # Set clash-core
+        mkdir -p files/etc/openclash/core
+        # VERNESONG_CORE=$(curl -sL https://api.github.com/repos/vernesong/OpenClash/releases/tags/Clash | grep /clash-linux-armv8 | awk -F '"' '{print $4}')
+        # VERNESONG_TUN=$(curl -sL https://api.github.com/repos/vernesong/OpenClash/releases/tags/TUN-Premium | grep /clash-linux-armv8 | awk -F '"' '{print $4}')
+        # VERNESONG_GAME=$(curl -sL https://api.github.com/repos/vernesong/OpenClash/releases/tags/TUN | grep /clash-linux-armv8 | awk -F '"' '{print $4}')
+        DREAMACRO_CORE=$(curl -sL https://api.github.com/repos/Dreamacro/clash/releases | grep /clash-linux-armv8 | awk -F '"' '{print $4}' | sed -n '1p')
+        DREAMACRO_TUN=$(curl -sL https://api.github.com/repos/Dreamacro/clash/releases/tags/premium | grep /clash-linux-armv8 | awk -F '"' '{print $4}')
+        META_CORE=$(curl -sL https://api.github.com/repos/MetaCubeX/Clash.Meta/releases | grep /Clash.Meta-linux-arm64-v | awk -F '"' '{print $4}' | sed -n '1p')
+        # wget -qO- $VERNESONG_CORE | tar xOvz > files/etc/openclash/core/clash_vernesong
+        # wget -qO- $VERNESONG_TUN | gunzip -c > files/etc/openclash/core/clash_tun_vernesong
+        # wget -qO- $VERNESONG_GAME | tar xOvz > files/etc/openclash/core/clash_game_vernesong
+        wget -qO- $DREAMACRO_CORE | gunzip -c > files/etc/openclash/core/clash
+        wget -qO- $DREAMACRO_TUN | gunzip -c > files/etc/openclash/core/clash_tun
+        wget -qO- $META_CORE | gunzip -c > files/etc/openclash/core/clash_meta
+        chmod +x files/etc/openclash/core/clash*
+        
+        # Set v2ray-rules-dat
+        mkdir -p files/etc/openclash
+        curl -sL https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat -o files/etc/openclash/GeoSite.dat
+        curl -sL https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat -o files/etc/openclash/GeoIP.dat
+        
+        #================================
+        # Monitoring
+        #================================
+        # User online cek
+        
+        svn co https://github.com/haiibo/openwrt-packages/trunk/luci-app-onliner package/luci-app-onliner
+        svn co https://github.com/brvphoenix/luci-app-wrtbwmon/trunk/luci-app-wrtbwmon package/luci-app-wrtbwmon
+        svn co https://github.com/brvphoenix/wrtbwmon/trunk/wrtbwmon package/wrtbwmon
+        #cat
+        # rm -rf feeds/luci/applications/luci-app-netdata
+        sed -i 's/10.*/10.* 11.* 192.168.* 172.16.* 172.17.* 172.18.* 172.19.* 172.20.* 172.21.* 172.22.* 172.23.* 172.24.* 172.25.* 172.26.* 172.27.* 172.28.* 172.29.* 172.30.* 172.31.*/g' package/feeds/packages/netdata/files/netdata.conf
+        # git clone --depth 1 https://github.com/karnadii/luci-app-netdata feeds/luci/applications/luci-app-netdata
+
         
         # internet detector
         svn co https://github.com/gSpotx2f/luci-app-internet-detector/trunk/luci-app-internet-detector package/luci-app-internet-detector
@@ -115,6 +196,24 @@ jobs:
         # iStore
         svn co https://github.com/linkease/istore-ui/trunk/app-store-ui package/app-store-ui
         svn co https://github.com/linkease/istore/trunk/luci package/istore
+        # Openclash Config Editor by Tiny File Manager
+        # Copyright 2022 by lynxnexy <https://github.com/lynxnexy/immortalwrt>
+        # 
+        
+        cat << EOF > package/luci-app-openclash/luasrc/view/openclash/editor.htm
+        <%+header%>
+        <div class="cbi-map">
+        <iframe id="editor" style="width: 100%; min-height: 100vh; border: none; border-radius: 2px;"></iframe>
+        </div>
+        <script type="text/javascript">
+        document.getElementById("editor").src = "http://" + window.location.hostname + "/tinyfm/tinyfm.php?p=etc/openclash";
+        </script>
+        <%+footer%>
+        EOF
+        
+        sed -i "s/yacd/Yet Another Clash Dashboard/g" package/luci-app-openclash/root/usr/share/openclash/ui/yacd/manifest.webmanifest
+        sed -i '94s/80/90/g' package/luci-app-openclash/luasrc/controller/openclash.lua
+        sed -i '94 i\	entry({"admin", "services", "openclash", "editor"}, template("openclash/editor"),_("Config Editor"), 80).leaf = true' package/luci-app-openclash/luasrc/controller/openclash.lua
         # Set modemmanager to disable
         mkdir -p feeds/luci/protocols/luci-proto-modemmanager/root/etc/uci-defaults
         cat << EOF > feeds/luci/protocols/luci-proto-modemmanager/root/etc/uci-defaults/70-modemmanager
@@ -173,17 +272,60 @@ jobs:
         CONFIG_TARGET_ipq40xx_generic_DEVICE_p2w_r619ac-128m=y
         EOF
 
-        # USB2.0支持:
-        # cat >> .config <<EOF
-        # CONFIG_PACKAGE_kmod-usb-core=y
-        # CONFIG_PACKAGE_kmod-usb-dwc3=y
-        # CONFIG_PACKAGE_kmod-usb-dwc3-qcom=y
-        # CONFIG_PACKAGE_kmod-usb-storage=y
-        # CONFIG_PACKAGE_kmod-usb-storage-extras=y
-        # CONFIG_PACKAGE_kmod-usb-storage-uas=y
-        # CONFIG_PACKAGE_kmod-usb-xhci-hcd=y
-        # CONFIG_PACKAGE_kmod-usb3=y
-        # EOF
+        # USB SUPPORT:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_kmod-usb-acm=y
+        CONFIG_PACKAGE_kmod-usb-core=y
+        CONFIG_PACKAGE_kmod-usb-dwc2=y
+        CONFIG_PACKAGE_kmod-usb-dwc3=y
+        CONFIG_PACKAGE_kmod-usb-ehci=y
+        CONFIG_PACKAGE_kmod-usb-ohci=y
+        CONFIG_PACKAGE_kmod-usb-ohci-pci=y
+        CONFIG_PACKAGE_kmod-usb-hid=y
+        CONFIG_PACKAGE_kmod-usb-net=y
+        CONFIG_PACKAGE_kmod-usb-net-asix=y
+        CONFIG_PACKAGE_kmod-usb-net-asix-ax88179=y
+        CONFIG_PACKAGE_kmod-usb-net-cdc-eem=y
+        CONFIG_PACKAGE_kmod-usb-net-cdc-ether=y
+        CONFIG_PACKAGE_kmod-usb-net-cdc-mbim=y
+        CONFIG_PACKAGE_kmod-usb-net-cdc-ncm=y
+        CONFIG_PACKAGE_kmod-usb-net-cdc-subset=y
+        CONFIG_PACKAGE_kmod-usb-net-dm9601-ether=y
+        CONFIG_PACKAGE_kmod-usb-net-hso=y
+        CONFIG_PACKAGE_kmod-usb-net-huawei-cdc-ncm=y
+        CONFIG_PACKAGE_kmod-usb-net-ipheth=y
+        CONFIG_PACKAGE_kmod-usb-net-kalmia=y
+        CONFIG_PACKAGE_kmod-usb-net-kaweth=y
+        CONFIG_PACKAGE_kmod-usb-net-mcs7830=y
+        CONFIG_PACKAGE_kmod-usb-net-pegasus=y
+        CONFIG_PACKAGE_kmod-usb-net-pl=y
+        CONFIG_PACKAGE_kmod-usb-net-qmi-wwan=y
+        CONFIG_PACKAGE_kmod-usb-net-rndis=y
+        CONFIG_PACKAGE_kmod-usb-net-rtl8150=y
+        CONFIG_PACKAGE_kmod-usb-net-rtl8152=y
+        CONFIG_PACKAGE_kmod-usb-net-sierrawireless=y
+        CONFIG_PACKAGE_kmod-usb-net-smsc95xx=y
+        CONFIG_PACKAGE_kmod-usb-net-sr9700=y
+        CONFIG_PACKAGE_kmod-usb-ohci=y
+        CONFIG_PACKAGE_kmod-usb-printer=y
+        CONFIG_PACKAGE_kmod-usb-serial=y
+        CONFIG_PACKAGE_kmod-usb-serial-ch341=y
+        CONFIG_PACKAGE_kmod-usb-serial-cp210x=y
+        CONFIG_PACKAGE_kmod-usb-serial-option=y
+        CONFIG_PACKAGE_kmod-usb-serial-pl2303=y
+        CONFIG_PACKAGE_kmod-usb-serial-wwan=y
+        CONFIG_PACKAGE_kmod-usb-storage=y
+        CONFIG_PACKAGE_kmod-usb-storage-extras=y
+        CONFIG_PACKAGE_kmod-usb-uhci=y
+        CONFIG_PACKAGE_kmod-usb-wdm=y
+        CONFIG_PACKAGE_kmod-usb2=y
+        CONFIG_PACKAGE_kmod-usb2-pci=y
+        CONFIG_PACKAGE_kmod-usb3=y
+        CONFIG_PACKAGE_kmod-usbip=y
+        CONFIG_PACKAGE_kmod-usbip-client=y
+        CONFIG_PACKAGE_kmod-usbip-server=y
+        CONFIG_PACKAGE_kmod-usbmon=y
+        EOF
 
         # IPv6支持:
         cat >> .config <<EOF
@@ -196,30 +338,230 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        # CONFIG_PACKAGE_luci-app-adguardhome is not set
+        # Applications:
+        # CONFIG_PACKAGE_luci-app-accesscontrol is not set
+        # CONFIG_PACKAGE_luci-app-acl is not set
+        # CONFIG_PACKAGE_luci-app-acme is not set
+        # CONFIG_PACKAGE_luci-app-adblock is not set
+        # CONFIG_PACKAGE_luci-app-adbyby-plus is not set
+        # CONFIG_PACKAGE_luci-app-advanced-reboot is not set
+        # CONFIG_PACKAGE_luci-app-advancedsetting is not set
+        # CONFIG_PACKAGE_luci-app-ahcp is not set
+        # CONFIG_PACKAGE_luci-app-airplay2 is not set
+        # CONFIG_PACKAGE_luci-app-airwhu is not set
         # CONFIG_PACKAGE_luci-app-aliddns is not set
+        # CONFIG_PACKAGE_luci-app-amule is not set
+        # CONFIG_PACKAGE_luci-app-appfilter is not set
         CONFIG_PACKAGE_luci-app-argon-config=y
+        # CONFIG_PACKAGE_luci-app-aria2 is not set
+        # CONFIG_PACKAGE_luci-app-arpbind is not set
+        # CONFIG_PACKAGE_luci-app-attendedsysupgrade is not set
         CONFIG_PACKAGE_luci-app-autoreboot=y
-        CONFIG_PACKAGE_luci-app-commands=y
-        CONFIG_PACKAGE_luci-app-opkg=y
-        CONFIG_PACKAGE_luci-app-ddns=y
+        # CONFIG_PACKAGE_luci-app-babeld is not set
+        # CONFIG_PACKAGE_luci-app-baidupcs-web is not set
+        # CONFIG_PACKAGE_luci-app-banip is not set
+        # CONFIG_PACKAGE_luci-app-bcp38 is not set
+        # CONFIG_PACKAGE_luci-app-beardropper is not set
+        # CONFIG_PACKAGE_luci-app-bird1-ipv4 is not set
+        # CONFIG_PACKAGE_luci-app-bird1-ipv6 is not set
+        # CONFIG_PACKAGE_luci-app-bmx6 is not set
+        # CONFIG_PACKAGE_luci-app-bmx7 is not set
+        # CONFIG_PACKAGE_luci-app-brook-server is not set
+        # CONFIG_PACKAGE_luci-app-cd8021x is not set
+        # CONFIG_PACKAGE_luci-app-cifs is not set
+        CONFIG_PACKAGE_luci-app-cifs-mount=y
+        # CONFIG_PACKAGE_luci-app-cjdns is not set
+        # CONFIG_PACKAGE_luci-app-clamav is not set
+        # CONFIG_PACKAGE_luci-app-commands is not set
+        # CONFIG_PACKAGE_luci-app-cpufreq is not set
+        # CONFIG_PACKAGE_luci-app-cpulimit is not set
+        # CONFIG_PACKAGE_luci-app-cshark is not set
+        # CONFIG_PACKAGE_luci-app-dawn is not set
+        # CONFIG_PACKAGE_luci-app-dcwapd is not set
+        # CONFIG_PACKAGE_luci-app-ddns is not set
+        # CONFIG_PACKAGE_luci-app-diag-core is not set
+        CONFIG_PACKAGE_luci-app-diskman=y
+        CONFIG_PACKAGE_luci-app-diskman_INCLUDE_btrfs_progs=y
+        CONFIG_PACKAGE_luci-app-diskman_INCLUDE_lsblk=y
+        # CONFIG_PACKAGE_luci-app-diskman_INCLUDE_mdadm is not set
+        # CONFIG_PACKAGE_luci-app-dnscrypt-proxy is not set
+        # CONFIG_PACKAGE_luci-app-dnsforwarder is not set
+        # CONFIG_PACKAGE_luci-app-docker is not set
+        CONFIG_PACKAGE_luci-app-dockerman=y
+        # CONFIG_PACKAGE_luci-app-dump1090 is not set
+        # CONFIG_PACKAGE_luci-app-dynapoint is not set
+        # CONFIG_PACKAGE_luci-app-eoip is not set
+        CONFIG_PACKAGE_luci-app-eqos=y
+        # CONFIG_PACKAGE_luci-app-familycloud is not set
+        # CONFIG_PACKAGE_luci-app-fileassistant is not set
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        # CONFIG_PACKAGE_luci-app-filetransfer is not set
         CONFIG_PACKAGE_luci-app-firewall=y
-        CONFIG_PACKAGE_luci-app-filetransfer=y
+        # CONFIG_PACKAGE_luci-app-frpc is not set
+        # CONFIG_PACKAGE_luci-app-frps is not set
+        # CONFIG_PACKAGE_luci-app-fwknopd is not set
+        # CONFIG_PACKAGE_luci-app-gost is not set
+        # CONFIG_PACKAGE_luci-app-gowebdav is not set
+        # CONFIG_PACKAGE_luci-app-guest-wifi is not set
+        # CONFIG_PACKAGE_luci-app-haproxy-tcp is not set
+        CONFIG_PACKAGE_luci-app-hd-idle=y
+        # CONFIG_PACKAGE_luci-app-hnet is not set
+        # CONFIG_PACKAGE_luci-app-https-dns-proxy is not set
+        # CONFIG_PACKAGE_luci-app-ipsec-vpnd is not set
+        # CONFIG_PACKAGE_luci-app-ipsec-vpnserver-manyusers is not set
+        # CONFIG_PACKAGE_luci-app-iptvhelper is not set
+        # CONFIG_PACKAGE_luci-app-kcptun is not set
+        # CONFIG_PACKAGE_luci-app-kodexplorer is not set
+        # CONFIG_PACKAGE_luci-app-ksmbd is not set
+        # CONFIG_PACKAGE_luci-app-ledtrig-rssi is not set
+        # CONFIG_PACKAGE_luci-app-ledtrig-switch is not set
+        # CONFIG_PACKAGE_luci-app-ledtrig-usbport is not set
+        # CONFIG_PACKAGE_luci-app-lxc is not set
+        # CONFIG_PACKAGE_luci-app-mentohust is not set
+        CONFIG_PACKAGE_luci-app-minidlna=n
+        # CONFIG_PACKAGE_luci-app-minieap is not set
+        # CONFIG_PACKAGE_luci-app-mjpg-streamer is not set
+        # CONFIG_PACKAGE_luci-app-music-remote-center is not set
+        CONFIG_PACKAGE_luci-app-mwan3=y
+        # CONFIG_PACKAGE_luci-app-mwan3helper is not set
+        # CONFIG_PACKAGE_luci-app-mwol is not set
+        # CONFIG_PACKAGE_luci-app-n2n_v2 is not set
+        # CONFIG_PACKAGE_luci-app-naiveproxy is not set
+        # CONFIG_PACKAGE_luci-app-nextdns is not set
+        # CONFIG_PACKAGE_luci-app-nfs is not set
+        # CONFIG_PACKAGE_luci-app-nft-qos is not set
+        # CONFIG_PACKAGE_luci-app-nginx-pingos is not set
+        # CONFIG_PACKAGE_luci-app-ngrokc is not set
+        # CONFIG_PACKAGE_luci-app-njitclient is not set
+        CONFIG_PACKAGE_luci-app-nlbwmon=y
+        # CONFIG_PACKAGE_luci-app-nps is not set
+        # CONFIG_PACKAGE_luci-app-ntpc is not set
+        # CONFIG_PACKAGE_luci-app-nut is not set
+        # CONFIG_PACKAGE_luci-app-ocserv is not set
+        # CONFIG_PACKAGE_luci-app-olsr is not set
+        # CONFIG_PACKAGE_luci-app-olsr-services is not set
+        # CONFIG_PACKAGE_luci-app-olsr-viz is not set
+        # CONFIG_PACKAGE_luci-app-omcproxy is not set
+        CONFIG_PACKAGE_luci-app-openvpn=y
+        # CONFIG_PACKAGE_luci-app-openvpn-server is not set
+        CONFIG_PACKAGE_luci-app-opkg=y
+        # CONFIG_PACKAGE_luci-app-oscam is not set
+        # CONFIG_PACKAGE_luci-app-p910nd is not set
+        # CONFIG_PACKAGE_luci-app-pagekitec is not set
         CONFIG_PACKAGE_luci-app-passwall=y
-        # CONFIG_PACKAGE_luci-app-pushbot is not set
+        CONFIG_PACKAGE_luci-app-passwall_Transparent_Proxy=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Brook=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ChinaDNS_NG=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
+        # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_IPv6_Nat is not set
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_GO=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
+        # CONFIG_PACKAGE_luci-app-poweroff is not set
+        # CONFIG_PACKAGE_luci-app-polipo is not set
+        # CONFIG_PACKAGE_luci-app-pppoe-relay is not set
+        # CONFIG_PACKAGE_luci-app-pppoe-server is not set
+        # CONFIG_PACKAGE_luci-app-privoxy is not set
+        # CONFIG_PACKAGE_luci-app-ps3netsrv is not set
+        # CONFIG_PACKAGE_luci-app-qbittorrent is not set
+        # CONFIG_PACKAGE_luci-app-qos is not set
+        # CONFIG_PACKAGE_luci-app-radicale is not set
+        # CONFIG_PACKAGE_luci-app-radicale2 is not set
         CONFIG_PACKAGE_luci-app-ramfree=y
-        # CONFIG_PACKAGE_luci-app-samba4 is not set
-        CONFIG_PACKAGE_luci-app-ssr-plus=y
-        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
-        CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_luci-app-rclone=y
+        CONFIG_PACKAGE_luci-app-rclone_INCLUDE_rclone-webui=y
+        CONFIG_PACKAGE_luci-app-rclone_INCLUDE_rclone-ng=y
+        # CONFIG_PACKAGE_luci-app-rp-pppoe-server is not set
+        CONFIG_PACKAGE_luci-app-samba4=y
+        # CONFIG_PACKAGE_luci-app-scutclient is not set
+        # CONFIG_PACKAGE_luci-app-ser2net is not set
+        # CONFIG_PACKAGE_luci-app-serverchan is not set
+        # CONFIG_PACKAGE_luci-app-shadowsocks-libev is not set
+        # CONFIG_PACKAGE_luci-app-shairplay is not set
+        # CONFIG_PACKAGE_luci-app-siitwizard is not set
+        # CONFIG_PACKAGE_luci-app-simple-adblock is not set
+        # CONFIG_PACKAGE_luci-app-smartdns is not set
+        # CONFIG_PACKAGE_luci-app-smstool is not set
+        # CONFIG_PACKAGE_luci-app-snmpd is not set
+        # CONFIG_PACKAGE_luci-app-socat is not set
+        # CONFIG_PACKAGE_luci-app-softether is not set
+        # CONFIG_PACKAGE_luci-app-softethervpn is not set
+        # CONFIG_PACKAGE_luci-app-softethervpn5 is not set
+        # CONFIG_PACKAGE_luci-app-speederv2 is not set
+        # CONFIG_PACKAGE_luci-app-splash is not set
         # CONFIG_PACKAGE_luci-app-sqm is not set
+        # CONFIG_PACKAGE_luci-app-squid is not set
+        # CONFIG_PACKAGE_luci-app-ssocks is not set
+        # CONFIG_PACKAGE_luci-app-ssr-libev-server is not set
+        # CONFIG_PACKAGE_luci-app-ssr-mudb-server is not set
+        CONFIG_PACKAGE_luci-app-statistics=y
+        # CONFIG_PACKAGE_luci-app-syncdial is not set
+        # CONFIG_PACKAGE_luci-app-syncthing is not set
+        # CONFIG_PACKAGE_luci-app-sysuh3c is not set
+        # CONFIG_PACKAGE_luci-app-timecontrol is not set
+        # CONFIG_PACKAGE_luci-app-timewol is not set
+        # CONFIG_PACKAGE_luci-app-tinyproxy is not set
+        CONFIG_PACKAGE_luci-app-transmission=y
+        # CONFIG_PACKAGE_luci-app-travelmate is not set
+        # CONFIG_PACKAGE_luci-app-trojan-server is not set
         CONFIG_PACKAGE_luci-app-ttyd=y
-        CONFIG_PACKAGE_luci-app-upnp=y
-        CONFIG_PACKAGE_luci-app-udpxy=y
+        CONFIG_PACKAGE_luci-app-turboacc=y
+        CONFIG_PACKAGE_luci-app-turboacc_INCLUDE_OFFLOADING=y
+        CONFIG_PACKAGE_luci-app-turboacc_INCLUDE_DNSFORWARDER=y
+        CONFIG_PACKAGE_luci-app-turboacc_INCLUDE_DNSPROXY=y
+        # CONFIG_PACKAGE_TURBOACC_INCLUDE_SHORTCUT_FE is not set
+        # CONFIG_PACKAGE_TURBOACC_INCLUDE_BBR_CCA is not set
+        # CONFIG_PACKAGE_luci-app-udp2raw is not set
+        # CONFIG_PACKAGE_luci-app-udpxy is not set
+        # CONFIG_PACKAGE_luci-app-uhttpd is not set
+        # CONFIG_PACKAGE_luci-app-unblockmusic is not set
+        # CONFIG_UnblockNeteaseMusic_Go is not set
+        # CONFIG_UnblockNeteaseMusic_NodeJS is not set
+        # CONFIG_PACKAGE_luci-app-unblockneteasemusic is not set
+        # CONFIG_PACKAGE_luci-app-unblockneteasemusic-go is not set
+        # CONFIG_PACKAGE_luci-app-unbound is not set
+        # CONFIG_PACKAGE_luci-app-upnp is not set
+        CONFIG_PACKAGE_luci-app-usb-printer=y
+        # CONFIG_PACKAGE_luci-app-usb3disable is not set
+        # CONFIG_PACKAGE_luci-app-uugamebooster is not set
+        # CONFIG_PACKAGE_luci-app-v2ray-server is not set
+        # CONFIG_PACKAGE_luci-app-verysync is not set
+        # CONFIG_PACKAGE_luci-app-vlmcsd is not set
+        # CONFIG_PACKAGE_luci-app-vnstat is not set
+        # CONFIG_PACKAGE_luci-app-vnstat2 is not set
+        # CONFIG_PACKAGE_luci-app-vpn-policy-routing is not set
+        # CONFIG_PACKAGE_luci-app-vpnbypass is not set
         # CONFIG_PACKAGE_luci-app-vsftpd is not set
-        CONFIG_PACKAGE_luci-app-vlmcsd=y
-        CONFIG_PACKAGE_luci-app-wol=y
-        # CONFIG_PACKAGE_luci-app-zerotier is not set
+        # CONFIG_PACKAGE_luci-app-vssr is not set
+        # CONFIG_PACKAGE_luci-app-vssr_INCLUDE_Kcptun is not set
+        # CONFIG_PACKAGE_luci-app-vssr_INCLUDE_ShadowsocksR_Libev_Server is not set
+        # CONFIG_PACKAGE_luci-app-vssr_INCLUDE_Trojan is not set
+        # CONFIG_PACKAGE_luci-app-vssr_INCLUDE_Xray is not set
+        # CONFIG_PACKAGE_luci-app-vssr_INCLUDE_Xray_plugin is not set
+        # CONFIG_PACKAGE_luci-app-watchcat is not set
+        # CONFIG_PACKAGE_luci-app-webadmin is not set
+        # CONFIG_PACKAGE_luci-app-webrestriction is not set
+        # CONFIG_PACKAGE_luci-app-weburl is not set
+        # CONFIG_PACKAGE_luci-app-wifischedule is not set
+        CONFIG_PACKAGE_luci-app-wireguard=y
+        # CONFIG_PACKAGE_luci-app-wol is not set
+        # CONFIG_PACKAGE_luci-app-xinetd is not set
+        # CONFIG_PACKAGE_luci-app-xlnetacc is not set
+        # CONFIG_PACKAGE_luci-app-yggdrasil is not set
+        CONFIG_PACKAGE_luci-app-zerotier=y
+        CONFIG_PACKAGE_luci-app-netdata=y
         EOF
 
         # rooter support:
@@ -239,11 +581,31 @@ jobs:
         CONFIG_PACKAGE_ext-throttle=y 
         CONFIG_PACKAGE_msmtp=y
         CONFIG_PACKAGE_luci-theme-argon=y
-        CONFIG_PACKAGE_luci-app-atinout-mod=y
-        CONFIG_PACKAGE_luci-app-internet-detector=y
-        CONFIG_PACKAGE_internet-detector=y
         # app store
         CONFIG_PACKAGE_luci-app-store=y
+        EOF
+
+        # Protocols:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-proto-3g=y
+        CONFIG_PACKAGE_luci-proto-bonding=y
+        # CONFIG_PACKAGE_luci-proto-gre is not set
+        # CONFIG_PACKAGE_luci-proto-hnet is not set
+        # CONFIG_PACKAGE_luci-proto-ipip is not set
+        CONFIG_PACKAGE_luci-proto-ipv6=y
+        # CONFIG_PACKAGE_luci-proto-minieap is not set
+        CONFIG_PACKAGE_luci-proto-modemmanager=y
+        CONFIG_PACKAGE_luci-proto-ncm=y
+        CONFIG_PACKAGE_luci-proto-openconnect=y
+        # CONFIG_PACKAGE_luci-proto-openfortivpn is not set
+        CONFIG_PACKAGE_luci-proto-ppp=y
+        # CONFIG_PACKAGE_luci-proto-pppossh is not set
+        # CONFIG_PACKAGE_luci-proto-qmi is not set
+        CONFIG_PACKAGE_luci-proto-relay=y
+        CONFIG_PACKAGE_luci-proto-sstp=y
+        # CONFIG_PACKAGE_luci-proto-vpnc is not set
+        # CONFIG_PACKAGE_luci-proto-vxlan is not set
+        CONFIG_PACKAGE_luci-proto-wireguard=y
         EOF
 
         # 常用软件包:
@@ -252,6 +614,237 @@ jobs:
         CONFIG_PACKAGE_default-settings-chn=y
         # CONFIG_PACKAGE_automount is not set
         # CONFIG_PACKAGE_autosamba is not set
+        # Perl:
+        CONFIG_PACKAGE_perl=y
+        CONFIG_PACKAGE_perl-http-date=y
+        CONFIG_PACKAGE_perlbase-getopt=y
+        CONFIG_PACKAGE_perlbase-time=y
+        CONFIG_PACKAGE_perlbase-unicode=y
+        CONFIG_PACKAGE_perlbase-utf8=y
+        
+        # Software:
+        CONFIG_PACKAGE_aircrack-ng=m
+        CONFIG_PACKAGE_apcupsd=y
+        CONFIG_PACKAGE_apcupsd-cgi=y
+        CONFIG_PACKAGE_attr=y
+        CONFIG_PACKAGE_autocore-arm=y
+        CONFIG_PACKAGE_bash=y
+        CONFIG_PACKAGE_base-files=y
+        # CONFIG_PACKAGE_bind-server=y
+        CONFIG_PACKAGE_blkid=y
+        CONFIG_PACKAGE_blockd=y
+        CONFIG_PACKAGE_block-mount=y
+        CONFIG_PACKAGE_bsdtar=y
+        CONFIG_PACKAGE_btrfs-progs=y
+        CONFIG_PACKAGE_bzip2=y
+        CONFIG_PACKAGE_ca-bundle=y
+        CONFIG_PACKAGE_chattr=y
+        CONFIG_PACKAGE_curl=y
+        CONFIG_PACKAGE_cfdisk=y
+        CONFIG_PACKAGE_coremark=y
+        CONFIG_PACKAGE_coreutils=y
+        CONFIG_PACKAGE_coreutils-base64=y
+        CONFIG_PACKAGE_coreutils-dd=y
+        CONFIG_PACKAGE_coreutils-nohup=y
+        CONFIG_PACKAGE_default-settings=y
+        CONFIG_PACKAGE_docker=y
+        CONFIG_PACKAGE_docker-compose=y
+        CONFIG_PACKAGE_dockerd=y
+        CONFIG_PACKAGE_dumpe2fs=y
+        CONFIG_PACKAGE_dosfstools=y
+        CONFIG_PACKAGE_ethtool=y
+        CONFIG_PACKAGE_e2freefrag=y
+        CONFIG_PACKAGE_e2fsprogs=y
+        CONFIG_PACKAGE_f2fs-tools=y
+        CONFIG_PACKAGE_f2fsck=y
+        CONFIG_PACKAGE_fdisk=y
+        CONFIG_PACKAGE_file=y
+        CONFIG_PACKAGE_gzip=y
+        CONFIG_PACKAGE_gawk=y
+        CONFIG_PACKAGE_getopt=y
+        CONFIG_PACKAGE_htop=y
+        CONFIG_PACKAGE_iconv=y
+        CONFIG_PACKAGE_iw=y
+        CONFIG_PACKAGE_iwinfo=y
+        CONFIG_PACKAGE_jq=y
+        CONFIG_PACKAGE_jshn=y
+        CONFIG_PACKAGE_iftop=y
+        CONFIG_PACKAGE_iperf3=y
+        CONFIG_PACKAGE_lsattr=y
+        CONFIG_PACKAGE_libpci=y
+        CONFIG_PACKAGE_libpcre=y
+        CONFIG_PACKAGE_libpcre16=y
+        CONFIG_PACKAGE_libpcre2=y
+        CONFIG_PACKAGE_libpcre2-16=y
+        CONFIG_PACKAGE_libpcre2-32=y
+        CONFIG_PACKAGE_libpng=y
+        CONFIG_PACKAGE_libpopt=y
+        CONFIG_PACKAGE_libprotobuf-c=y
+        CONFIG_PACKAGE_libqmi=y
+        CONFIG_PACKAGE_libreadline=y
+        CONFIG_PACKAGE_libseccomp=y
+        CONFIG_PACKAGE_libsmartcols=y
+        CONFIG_PACKAGE_libsndfile=y
+        CONFIG_PACKAGE_libsoc=y
+        CONFIG_PACKAGE_libsocks=y
+        CONFIG_PACKAGE_libsodium=y
+        CONFIG_PACKAGE_less-wide=y
+        CONFIG_PACKAGE_libjson-script=y
+        CONFIG_PACKAGE_libnetwork=y
+        CONFIG_PACKAGE_lrzsz=y
+        CONFIG_PACKAGE_lsof=y
+        CONFIG_PACKAGE_lm-sensors=y
+        CONFIG_PACKAGE_losetup=y
+        CONFIG_PACKAGE_lsblk=y
+        CONFIG_PACKAGE_lscpu=y
+        CONFIG_PACKAGE_lz4=y
+        CONFIG_PACKAGE_mkf2fs=y
+        CONFIG_PACKAGE_modemmanager=y
+        CONFIG_PACKAGE_mount-utils=y
+        CONFIG_PACKAGE_nano=y
+        CONFIG_PACKAGE_ntfs-3g=y
+        CONFIG_PACKAGE_openssl-util=y
+        CONFIG_PACKAGE_p7zip=y
+        CONFIG_PACKAGE_parted=y
+        CONFIG_PACKAGE_pv=y
+        CONFIG_PACKAGE_qmi-utils=y
+        CONFIG_PACKAGE_runc=y
+        CONFIG_PACKAGE_resize2fs=y
+        CONFIG_PACKAGE_sysstat=y
+        CONFIG_PACKAGE_screen=y
+        CONFIG_PACKAGE_shellsync=y
+        CONFIG_PACKAGE_smartmontools=y
+        CONFIG_PACKAGE_smartmontools-drivedb=y
+        CONFIG_PACKAGE_samba4-admin=y
+        CONFIG_PACKAGE_samba4-client=y
+        CONFIG_PACKAGE_samba4-libs=y
+        CONFIG_PACKAGE_samba4-server=y
+        CONFIG_SAMBA4_SERVER_NETBIOS=y
+        CONFIG_SAMBA4_SERVER_AVAHI=y
+        CONFIG_SAMBA4_SERVER_VFS=y
+        CONFIG_PACKAGE_samba4-utils=y
+        CONFIG_PACKAGE_tree=y
+        CONFIG_PACKAGE_tune2fs=y
+        CONFIG_PACKAGE_tar=y
+        CONFIG_PACKAGE_TAR_POSIX_ACL=y
+        CONFIG_PACKAGE_TAR_XATTR=y
+        CONFIG_PACKAGE_TAR_BZIP2=y
+        CONFIG_PACKAGE_TAR_GZIP=y
+        CONFIG_PACKAGE_TAR_XZ=y
+        CONFIG_PACKAGE_TAR_ZSTD=y
+        CONFIG_PACKAGE_tini=y
+        CONFIG_PACKAGE_unzip=y
+        CONFIG_PACKAGE_usb-modeswitch=y
+        CONFIG_PACKAGE_usbutils=y
+        CONFIG_PACKAGE_usbreset=y
+        CONFIG_PACKAGE_uuid=y
+        CONFIG_PACKAGE_uuidgen=y
+        CONFIG_PACKAGE_vim=y
+        # CONFIG_PACKAGE_vsftpd-alt is not set
+        CONFIG_PACKAGE_wireless-tools=y
+        CONFIG_PACKAGE_wireguard-tools=y
+        CONFIG_PACKAGE_whereis=y
+        CONFIG_PACKAGE_wget=y
+        CONFIG_PACKAGE_wwan=y
+        CONFIG_PACKAGE_xfs-fsck=y
+        CONFIG_PACKAGE_xfs-mkfs=y
+        CONFIG_PACKAGE_xz-utils=y
+        CONFIG_PACKAGE_xz=y
+        CONFIG_PACKAGE_zstd=y
+        # CONFIG_VSFTPD_USE_UCI_SCRIPTS is not set
+        CONFIG_DOCKER_STO_EXT4=y
+        CONFIG_DOCKER_STO_BTRFS=y
+        CONFIG_RUNC_SECCOMP=y
+        CONFIG_STRACE_NONE=y
+        CONFIG_PCAP_HAS_USB=y
+        CONFIG_PCAP_HAS_NETFILTER=y
+        CONFIG_KERNEL_MAGIC_SYSRQ=y
+        CONFIG_PACKAGE_bc=y
+        CONFIG_PACKAGE_ntfs-3g=y
+        CONFIG_PACKAGE_ntfs-3g-utils=y
+        CONFIG_PACKAGE_libpam=y
+        CONFIG_PACKAGE_ipv6-helper=y
+        CONFIG_PACKAGE_autocore-arm=y
+        CONFIG_PACKAGE_wsdd2=y
+        CONFIG_PACKAGE_liblzma=y
+        CONFIG_PACKAGE_luci-lib-base=y
+        CONFIG_PACKAGE_wget-ssl=y
+        CONFIG_PACKAGE_libnetsnmp=y
+        CONFIG_PACKAGE_libcap=y
+        CONFIG_PACKAGE_openssh-sftp-client=y
+        CONFIG_PACKAGE_openssh-sftp-server=y
+        CONFIG_PACKAGE_python3=y
+        CONFIG_PACKAGE_python3-codecs=y
+        CONFIG_PACKAGE_python3-ctypes=y
+        CONFIG_PACKAGE_python3-email=y
+        CONFIG_PACKAGE_python3-mutagen=y
+        CONFIG_PACKAGE_python3-cryptodomex=y
+        CONFIG_PACKAGE_python3-setuptools=y
+        CONFIG_PACKAGE_python3-websockets=y
+        CONFIG_PACKAGE_python3-xml=y
+        CONFIG_PACKAGE_qrencode=y
+        CONFIG_PACKAGE_unrar=y
+        CONFIG_PACKAGE_ffmpeg=y
+        CONFIG_PACKAGE_ffprobe=y
+        CONFIG_PACKAGE_zsh=y
+        CONFIG_PACKAGE_chat=y
+        CONFIG_PACKAGE_atinout=y
+        CONFIG_PACKAGE_kmod-nls-base=y
+        CONFIG_PACKAGE_kmod-usb-serial-qualcomm=y
+        CONFIG_PACKAGE_libimobiledevice-utils=y
+        CONFIG_PACKAGE_libplist-utils=y
+        CONFIG_PACKAGE_libusbmuxd-utils=y
+        CONFIG_PACKAGE_minicom=y
+        CONFIG_PACKAGE_picocom=y
+        CONFIG_PACKAGE_usbmuxd=y
+        
+        # Custom:
+        CONFIG_PACKAGE_luci-app-openclash=y
+        CONFIG_PACKAGE_luci-app-v2raya=y
+        CONFIG_PACKAGE_luci-app-onliner=y
+        CONFIG_PACKAGE_luci-app-tinyfm=y
+        CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_3ginfo=n
+        CONFIG_PACKAGE_luci-app-3ginfo=n
+        CONFIG_PACKAGE_luci-app-atinout-mod=y
+        # CONFIG_PACKAGE_luci-app-amlogic is not set
+        CONFIG_PACKAGE_p7zip=y
+        CONFIG_PACKAGE_netdata=y
+        CONFIG_PACKAGE_luci-app-arpbind=y
+        CONFIG_PACKAGE_mwan3=y
+        CONFIG_PACKAGE_luci-app-libernet-plus=n
+        CONFIG_PACKAGE_luci-app-libernet-bin=n
+        CONFIG_PACKAGE_luci-app-mulimiter=y
+        CONFIG_PACKAGE_luci-app-myxllite=y
+        CONFIG_PACKAGE_luci-app-netmon=y
+        CONFIG_PACKAGE_luci-app-openspeedtest=y
+        CONFIG_PACKAGE_filebrowser=n
+        CONFIG_PACKAGE_luci-app-internet-detector=y
+        CONFIG_PACKAGE_internet-detector=y
+        # Libernet Dependensi
+        CONFIG_PACKAGE_coreutils-stdbuf=y
+        CONFIG_PACKAGE_openssh-client=y
+        CONFIG_PACKAGE_stubby=y
+        CONFIG_PACKAGE_httping=y
+        CONFIG_PACKAGE_stunnel=y
+        CONFIG_PACKAGE_https-dns-proxy=y
+        CONFIG_PACKAGE_getdns=y
+        CONFIG_PACKAGE_php7 is not set
+        CONFIG_PACKAGE_php8=y
+        CONFIG_PACKAGE_php8-cgi=y 
+        CONFIG_PACKAGE_php8-mod-session=y
+        
+        
+        # wrtbwmon
+        CONFIG_PACKAGE_wrtbwmon=n
+        CONFIG_PACKAGE_luci-app-wrtbwmon=n
+        
+        
+        # aria2
+        CONFIG_PACKAGE_aria2=y
+        CONFIG_PACKAGE_webui-aria2=y
+        CONFIG_PACKAGE_luci-app-aria2=y
+        CONFIG_PACKAGE_ariang=y
         EOF
 
         # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
