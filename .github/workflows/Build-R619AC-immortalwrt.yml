@@ -81,7 +81,7 @@ jobs:
     - name: File Patch Before
       run: |
         cd openwrt
-        sed '14 iuci\ commit\ network' -i package/emortal/default-settings/files/99-default-settings-chinese
+        # sed '14 iuci\ commit\ network' -i package/emortal/default-settings/files/99-default-settings-chinese
         # sed '14 iset\ network.globals.packet_steering=1' -i package/emortal/default-settings/files/99-default-settings-chinese
         # sed '4 iset\ system.@system[0].hostname=NeoBird' -i package/emortal/default-settings/files/99-default-settings-chinese
         sed -i 's/192.168.1.1/192.168.1.2/g' package/base-files/files/bin/config_generate
@@ -169,8 +169,8 @@ jobs:
         # 编译竞斗云固件:
         cat >> .config <<EOF
         CONFIG_TARGET_ipq40xx=y
-        CONFIG_TARGET_ipq40xx_generic=y
-        CONFIG_TARGET_ipq40xx_generic_DEVICE_p2w_r619ac-128m=y
+        CONFIG_TARGET_ipq40xx_DEVICE_p2w_r619ac-128m=y
+        CONFIG_TARGET_BOARD="ipq40xx"
         EOF
 
         # USB2.0支持:
