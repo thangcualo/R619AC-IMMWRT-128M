@@ -238,7 +238,7 @@ jobs:
         CONFIG_PACKAGE_bwallocate=y
         CONFIG_PACKAGE_ext-throttle=y 
         CONFIG_PACKAGE_msmtp=y
-        CONFIG_PACKAGE_luci-theme-argon=y
+        # CONFIG_PACKAGE_luci-theme-argon is not set
         CONFIG_PACKAGE_luci-app-atinout-mod=y
         CONFIG_PACKAGE_luci-app-internet-detector=y
         CONFIG_PACKAGE_internet-detector=y
